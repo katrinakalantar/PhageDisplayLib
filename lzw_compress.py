@@ -24,6 +24,7 @@ header = ''
 seq = ''
 
 outfile = open(args.o + '.fasta', 'w')
+outfile_removed = open(args.o + '_removed.fasta', 'w')
 
 ### main ###
 
@@ -37,6 +38,9 @@ with open(args.i,'r') as f:  #open the input file
                 if cr > args.t:  #if compression ratio > the specified threshold
                     outfile.write(header + '\n')
                     outfile.write(seq + '\n')
+                else:
+                    outfile_removed.write(header + '\n')
+                    outfile_removed.write(seq + '\n')
 
             seq = ''     #reset sequence
             header = line.strip()
