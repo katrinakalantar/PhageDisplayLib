@@ -47,8 +47,6 @@ parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?',
                         const=False, help="Run only restriction checking, default = False")
 args = parser.parse_args()
 print(args)
-#if(args.restrictiononly):
-#    print('checking restirction only')
 
 
 # In[81]:
@@ -259,11 +257,3 @@ for seq_ID in kmers_dict.keys():
 print ("len(full_seq_restriction_stripped_dict.keys()) = " + str(len(full_seq_restriction_stripped_dict.keys())))
 
 print("completed script.")
-
-
-# In[80]:
-
-
-
-
-#
