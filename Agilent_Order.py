@@ -43,8 +43,8 @@ parser.add_argument('-k','-kmer_size', help='length of kmer; default = 62', defa
 parser.add_argument('-w','-window_size', help='length of window; default = 31', default=31, nargs='?', type=int)
 parser.add_argument('-fp','-fiveprime', help='five prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='AGCCATCCGCAGTTCGAGAAA')  #default = STREP
 parser.add_argument('-tp','-threeprime', help='three prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='GACTACAAGGACGACGATGAT')
-parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?',
-                        const=False, help="Run only restriction checking, default = False")
+parser.add_argument('-p','-convert2peptide', help='return chopped up peptide sequences', type=str2bool, nargs='?',const=False)
+parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?', const=False, help="Run only restriction checking, default = False")
 args = parser.parse_args()
 print(args)
 
@@ -205,6 +205,18 @@ print(infile)
 ###Create dictionary of {seq_ID:peptide_sequence} values
 peptide_dict = open_infile(infile)
 print ("len(peptide_dict) = " + str(len(peptide_dict.keys())))
+
+if(args.p):   #return only a peptide dictionary - do not proceed with script
+    cut_peptide_dict = split_kmer_dict(peptide_dict, args.k, args.w)
+    outfile_1 = open(args.o + '.fasta', 'w')
+    for peptide_id in cut_peptide_dict.keys():
+        seq_count = 1
+        for seq in cut_peptide_dict[peptide_id]:
+            outfile_1.write(peptide_id + '_seq' + str(seq_count) + '\n')
+            outfile_1.write(seq+ '\n')
+            seq_count += 1
+    sys.exit()
+
 
 ###Generate a dictionary of {seq_ID:dna_sequence} values
 #if args.r: #don't translate the sequence, because its already a NT seq
