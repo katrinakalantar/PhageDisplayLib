@@ -37,14 +37,14 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 parser = argparse.ArgumentParser(description = 'Generate agilent order')
+parser.add_argument('-i','-infile', help='input filepath',type=str)
+parser.add_argument('-o','-outfile', help='output filepath (root name, no extension)',type=str)
+parser.add_argument('-k','-kmer_size', help='length of kmer; default = 62', default=62, nargs='?', type=int)
+parser.add_argument('-w','-window_size', help='length of window; default = 31', default=31, nargs='?', type=int)
 parser.add_argument('-fp','-fiveprime', help='five prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='AGCCATCCGCAGTTCGAGAAA')  #default = STREP
 parser.add_argument('-tp','-threeprime', help='three prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='GACTACAAGGACGACGATGAT')
 parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?',
                         const=False, help="Run only restriction checking, default = False")
-parser.add_argument('-k','-kmer_size', help='length of kmer; default = 62', default=62, nargs='?', type=int)
-parser.add_argument('-w','-window_size', help='length of window; default = 31', default=31, nargs='?', type=int)
-parser.add_argument('-i','-infile', help='input filepath',type=str)
-parser.add_argument('-o','-outfile', help='output filepath (root name, no extension)',type=str)
 args = parser.parse_args()
 print(args)
 #if(args.restrictiononly):
