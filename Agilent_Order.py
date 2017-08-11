@@ -44,7 +44,8 @@ parser.add_argument('-w','-window_size', help='length of window; default = 31', 
 parser.add_argument('-fp','-fiveprime', help='five prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='AGCCATCCGCAGTTCGAGAAA')  #default = STREP
 parser.add_argument('-tp','-threeprime', help='three prime end barcode sequence (nucleotide); default None',nargs='?',default='', type=str)  #, const='GACTACAAGGACGACGATGAT')
 parser.add_argument('-p','-convert2peptide', help='return chopped up peptide sequences', type=str2bool, nargs='?',const=False)
-parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?', const=False, help="Run only restriction checking, default = False")
+parser.add_argument('-r','-restrictiononly', type=str2bool, nargs='?', const=False,
+help="Run only restriction checking, default = False \n *note: -r=True is required when working with NT input")
 args = parser.parse_args()
 print(args)
 
