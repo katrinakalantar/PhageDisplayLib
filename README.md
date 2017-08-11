@@ -1,6 +1,6 @@
-#PhageDisplayLib
+# PhageDisplayLib
 
-###Agilent_Order.py
+### Agilent_Order.py
 
 Adapted from bodonovan's original script.
 Generate a .fasta and .txt sequence file containing the agilent order for peptidome.
@@ -19,7 +19,7 @@ python Agilent_Order.py -i input_file.fasta -o output_filename -k 62 -w 31 -fp A
 ```
 
 
-###lzw_compress.py
+### lzw_compress.py
 
 Dependencies:
 pip install lzstring
