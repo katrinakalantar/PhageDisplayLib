@@ -187,13 +187,25 @@ def remove_cutsites(sequence):
 
     return new_sequence
 
+### variables required for translation ###
+bases = ['t', 'c', 'a', 'g']
+codons = [a+b+c for a in bases for b in bases for c in bases]
+amino_acids = 'FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG'
+codon_table = dict(zip(codons, amino_acids))
 
-# In[ ]:
+def translate(seq):
+    seq = seq.lower().replace('\n', '').replace(' ', '')
+    peptide = ''
+    for i in range(0, len(seq), 3):
+        codon = seq[i: i+3]
+        amino_acid = codon_table.get(codon, '*')
+        if amino_acid != '*':
+            peptide += amino_acid
+        else:
+            break
+    return peptide
 
 
-
-
-# In[82]:
 
 kmer_size = args.k*3
 window_size = args.w*3
@@ -202,13 +214,16 @@ window_size = args.w*3
 infile = args.i     #.fasta file
 print(infile)
 
+outfile_1 = open(args.o + '.fasta', 'w')
+outfile_2 = open(args.o + '.txt', 'w')
+
 ###Create dictionary of {seq_ID:peptide_sequence} values
 peptide_dict = open_infile(infile)
 print ("len(peptide_dict) = " + str(len(peptide_dict.keys())))
 
+### Special Case #1: Just want to split peptide sequences into phage-length seqs, return amino acid seq ###
 if(args.p):   #return only a peptide dictionary - do not proceed with script
     cut_peptide_dict = split_kmer_dict(peptide_dict, args.k, args.w)
-    outfile_1 = open(args.o + '.fasta', 'w')
     for peptide_id in cut_peptide_dict.keys():
         seq_count = 1
         for seq in cut_peptide_dict[peptide_id]:
@@ -217,12 +232,29 @@ if(args.p):   #return only a peptide dictionary - do not proceed with script
             seq_count += 1
     sys.exit()
 
+### Special Case #2: Input is a NT sequence - only do tagging with 5' and 3' sequences and cutsite removal ###
+if(args.r):
+    nt_dict = peptide_dict   #this is actually NT, so rename for clarity
+    for seq_id in nt_dict.keys():
+        k = nt_dict[seq_id]
+        full_seq = args.fp + k + args.tp
+        full_seq_restriction_stripped = remove_cutsites(full_seq)
+
+        if not translate(full_seq) == translate(full_seq_restriction_stripped):
+            print("Error: restriction removal caused mismatch at peptide level! Not written to file.")
+            print(full_seq)
+            print(full_seq_restriction_stripped)
+
+        else: #protein sequence is valid, so write to file
+            outfile_1.write(seq_id + '\n')
+            outfile_1.write(full_seq_restriction_stripped + '\n')
+            outfile_2.write(full_seq_restriction_stripped + '\n\n')
+    sys.exit()
+
+
+### Main / Original case - directly translate AA sequence to NT sequences ###
 
 ###Generate a dictionary of {seq_ID:dna_sequence} values
-#if args.r: #don't translate the sequence, because its already a NT seq
-#    oligo_dict = peptide_dict
-#else:
-#    oligo_dict = generate_DNA_dict(peptide_dict)
 oligo_dict = generate_DNA_dict(peptide_dict)
 
 print ("len(oligo_dict) = " + str(len(oligo_dict.keys())))
@@ -245,8 +277,6 @@ print("len(kmers_dict) = " + str(len(kmers_dict.keys())))
 ###Generate order!
 full_seqs = {}
 full_seq_restriction_stripped_dict = {}
-outfile_1 = open(args.o + '.fasta', 'w')
-outfile_2 = open(args.o + '.txt', 'w')
 for seq_ID in kmers_dict.keys():
     kmers = kmers_dict[seq_ID]
     full_seq_restriction_stripped_dict[seq_ID] = []
