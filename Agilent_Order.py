@@ -23,6 +23,7 @@ import warnings
 import Bio
 from Bio.Seq import Seq
 import argparse
+import math
 
 
 
@@ -69,7 +70,16 @@ def split_kmers(sequence, kmer_size, window_size):
     kmer_list = []
     short_list = []
     if len(sequence) < kmer_size:
-        short_list.append(sequence)
+        #short_list.append(sequence)
+        #print(sequence)
+        pad_len = kmer_size - len(sequence)
+        if(pad_len%2==1):
+            pad1 = int(math.floor(pad_len/2))
+            pad2 = int(math.ceil(pad_len/2))
+        else:
+            pad1 = int(pad_len/2)
+            pad2 = int(pad_len/2)
+        sequence = ''.join(['A']*pad1) + sequence + ''.join(['A']*pad2)
     split_seqs = [sequence[i:i+kmer_size] for i in range(0, len(sequence), window_size)]
     split_seqs.append(sequence[-kmer_size:]) # Ensure that you get the last kmer
     for kmer in split_seqs:
