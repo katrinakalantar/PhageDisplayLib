@@ -48,3 +48,24 @@ python lzw_compress.py -i input_file.fasta -o output_filename -t .5
 
 Note: 
 
+
+### homopolymer_removal.py
+
+Remove sequences with strings of a single amino acid of length K, where default K = 8
+
+```
+python homopolyme_removal.py -i input_file.fasta -o output_filename -k 8
+```
+
+To determine the appropriate threshold, make use of scripts in /test_scripts. The lzw_compress.TEST.py file (run in the same way as lzw_compress.py) outputs a .csv file containing sequences and headers sorted by compression ratio. This file is referenced as input to the .ipynb jupyter notebook. NOTE: will need to update file path to the appropriate path for the .csv file. The jupyter notebook allows for visualization of the distribution of both homopolymer occurrence and compression ratio.
+
+
+### convert_X_to_A.py
+
+Loops through all sequences and converts all 'X' amino acides to 'A'.
+
+```
+python convert_X_to_A.py -i input_file.fast -o output_filename
+```
+
+
