@@ -5,7 +5,7 @@ from collections import Counter
 parser = argparse.ArgumentParser(description = 'Generate agilent order')
 parser.add_argument('-i','-infile', help='input filepath',type=str)
 parser.add_argument('-o','-outfile', help='output filepath',type=str)
-parser.add_argument('-k','-kmer_len', help='kmer length to remove; default = 7', default=7, nargs='?', type=int)
+parser.add_argument('-k','-kmer_len', help='kmer length to remove; default = 8', default=8, nargs='?', type=int)
 args = parser.parse_args()
 
 
