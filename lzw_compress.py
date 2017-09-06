@@ -16,7 +16,7 @@ def utf8len(s):
 def get_compression_ratio(seq):
     x = lzstring.LZString()
     compressed = x.compressToBase64(seq)
-    ratio = utf8len(compressed) / utf8len(seq)
+    ratio = float(utf8len(compressed)) / float(utf8len(seq))
     return ratio
 
 ### initialize variables ###
